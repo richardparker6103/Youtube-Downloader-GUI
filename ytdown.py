@@ -1,12 +1,19 @@
 # -*- coding: cp1252 -*-
-#------------------LEIAME-------------------------
+#------------------README-------------------------
 #Necessário executáveis ffmpeg, ffprobe, ffplay !
 #Por falta de espaço do github, é necessário baixar manualmente os componentes no site:
 #FFMPEG -> (ffmpeg, ffplay, ffprobe) https://www.ffmpeg.org/download.html
 #LIBAV -> (para evitar conflitos com o ffmpeg)
 #youtube-dl.exe(para download e conversão dos arquivos) -> https://youtube-dl.org/
 #PyQt biblioteca para edição GUI -> https://sourceforge.net/projects/pyqt/files/PyQt4/
-#------------------LEIAME-------------------------
+#------------------README-------------------------
+# Required executable ffmpeg, ffprobe, ffplay!
+#For lack of space of github, is to download the media components on the site:
+#FFMPEG -> (ffmpeg, ffplay, ffprobe) https://www.ffmpeg.org/download.html
+#LIBAV -> (to avoid with ffmpeg)
+# youtube-dl.exe (for download and file conversion) -> https://youtube-dl.org/
+#PyQt library for GUI editing -> https://sourceforge.net/projects/pyqt/files/PyQt4/
+#------------------README-------------------------
 
 import sys
 import os
