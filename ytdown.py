@@ -1,4 +1,13 @@
 # -*- coding: cp1252 -*-
+#------------------LEIAME-------------------------
+#NecessÃ¡rio executÃ¡veis ffmpeg, ffprobe, ffplay !
+#Por falta de espaÃ§o do github, Ã© necessÃ¡rio baixar manualmente os componentes no site:
+#FFMPEG -> (ffmpeg, ffplay, ffprobe) https://www.ffmpeg.org/download.html
+#LIBAV -> (para evitar conflitos com o ffmpeg)
+#youtube-dl.exe(para download e conversÃ£o dos arquivos) -> https://youtube-dl.org/
+#PyQt biblioteca para ediÃ§Ã£o GUI -> https://sourceforge.net/projects/pyqt/files/PyQt4/
+#------------------LEIAME-------------------------
+
 import sys
 import os
 from os2 import *
@@ -29,7 +38,7 @@ class Window(QMainWindow):
                 self.pic.setPixmap(QPixmap('ytb2.ico'))
                 self.pic.move(138,0)
                 self.pic.resize(300,145)
-                self.button = QPushButton('Baixar Vídeo', self)
+                self.button = QPushButton('Baixar VÃ­deo', self)
                 self.button.clicked.connect(self.iniciar_video)
                 self.button.resize(100,30)
                 self.button.move(210,210)
@@ -68,7 +77,7 @@ class Window(QMainWindow):
                         self.progress.setValue(self.completed)
                     self.msg = QMessageBox()
                     self.msg.setIcon(QMessageBox.Information)
-                    self.msg.setText("Vídeo salvo na área de trabalho")
+                    self.msg.setText("VÃ­deo salvo na Ã¡rea de trabalho")
                     self.msg.setWindowTitle('Python Youtube Downloader')
                     self.msg.setWindowIcon(QIcon('ytbico.ico'))
                     self.msg.exec_()                                  
@@ -124,7 +133,7 @@ class Window(QMainWindow):
                         self.progress.setValue(self.completed)
                     self.msg = QMessageBox()
                     self.msg.setIcon(QMessageBox.Information)
-                    self.msg.setText("MP3 salvo na área de trabalho")
+                    self.msg.setText("MP3 salvo na Ã¡rea de trabalho")
                     self.msg.setWindowTitle('Python Youtube Downloader')
                     self.msg.setWindowIcon(QIcon('ytbico.ico'))
                     self.msg.exec_()                                  
@@ -140,13 +149,13 @@ class Window(QMainWindow):
             print 'filePath' + nome_arquivo + '\n'
             fileHandle = open(nome_arquivo, 'r')
             if ".txt" in nome_arquivo:
-                print "É TXT"
+                print "Ã‰ TXT"
             else:
                 print "NAO E TXT\n ALERTANDO..."
                 self.msgt = QMessageBox()
                 self.msgt.setIcon(QMessageBox.Information)
                 self.msgt.setWindowTitle('Python Youtube Downloader')
-                self.msgt.setText("O arquivo {} selecionado não é valido, selecione um arquivo em formato .txt".format(str(nome_arquivo)))
+                self.msgt.setText("O arquivo {} selecionado nÃ£o Ã© valido, selecione um arquivo em formato .txt".format(str(nome_arquivo)))
                 self.msgt.setWindowIcon(QIcon('ytbico.ico'))
                 self.msgt.exec_()
                 self.browse()
@@ -159,7 +168,7 @@ class Window(QMainWindow):
             self.msg.setWindowTitle('Python Youtube Downloader')
             print lines
             if 'youtube.com/' not in str(lines):
-                self.msg.setText('Não foram encontrados nenhum link no arquivo {}'.format(str(nome_arquivo)))
+                self.msg.setText('NÃ£o foram encontrados nenhum link no arquivo {}'.format(str(nome_arquivo)))
                 self.msg.exec_()
                 self.browse
             else:
@@ -167,7 +176,7 @@ class Window(QMainWindow):
                 if asp == QMessageBox.No:
                     exit()
                 else:
-                    asp23 = QMessageBox.question(Window(), 'Python Youtube Downloader', 'Você deseja baixar somente MP3 ?', QMessageBox.Yes, QMessageBox.No)
+                    asp23 = QMessageBox.question(Window(), 'Python Youtube Downloader', 'VocÃª deseja baixar somente MP3 ?', QMessageBox.Yes, QMessageBox.No)
                     if asp23 == QMessageBox.No:
                         for k in lines:
                             self.iniciar_video('normal', 'True')
@@ -177,7 +186,7 @@ class Window(QMainWindow):
                     self.msgt2 =QMessageBox()
                     self.msgt2.setIcon(QMessageBox.Information)
                     self.msgt2.setWindowTitle('Python Youtube Downloader')
-                    self.msgt2.setText("{} arquivos foram baixados, salvos na Área de Trabalho".format(int(l)))
+                    self.msgt2.setText("{} arquivos foram baixados, salvos na Ãrea de Trabalho".format(int(l)))
                     self.msgt2.setWindowIcon(QIcon('ytbico.ico'))
                     self.msgt2.exec_()
                 
