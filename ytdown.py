@@ -236,17 +236,21 @@ class Window(QMainWindow):
                     source_arquivo_final = '"{}"'.format(source_arquivo)
                     print source_arquivo_final
                     print tipo
-                    print arquivo_final + '.' + tipo
-                    convert_command = 'ffmpeg -i {} {}'.format(str(source_arquivo_final), str(arquivo_final + '.' + tipo))
+                    print final_dos_finais
+                    af = arquivo_final + '.' + tipo
+                    final_dos_finais = '"{}"'.format(af)
+                    convert_command = 'ffmpeg -i {} {}'.format(str(source_arquivo_final), str(final_dos_finais))
                     os.system(convert_command)
                 elif tipo == 'aac' or tipo == 'flac' or tipo == 'wma':
                     source_arquivo_final = '"{}"'.format(source_arquivo)
-                    print source_arquivo
+                    print source_arquivo_final
                     print tipo
-                    print arquivo_final + '.' + tipo
-                    convert_command = 'ffmpeg -i {} {}'.format(str(source_arquivo_final), str(arquivo_final + '.' + tipo))
+                    print final_dos_finais
+                    af = arquivo_final + '.' + tipo
+                    final_dos_finais = '"{}"'.format(af)
+                    convert_command = 'ffmpeg -i {} {}'.format(str(source_arquivo_final), str(final_dos_finais))
                     os.system(convert_command)
-                #continue
+                  
                     
                 
             #if tipo == False:
