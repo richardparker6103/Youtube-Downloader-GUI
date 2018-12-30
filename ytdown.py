@@ -53,7 +53,7 @@ class Window(QMainWindow):
                 fileMenu.addAction(extractAction)
                 self.home()
         def home(self):
-            global tipo
+            global tipo    
             self.pic = QLabel(self)
             self.pic.setPixmap(QPixmap('ytbico.ico'))
             self.pic.setGeometry(234,-100,480,480)
@@ -93,8 +93,6 @@ class Window(QMainWindow):
             self.wma.setGeometry(QRect(300, 420, 71,21))
             self.flac = QCheckBox('FLAC', self)
             self.flac.setGeometry(QRect(300, 440, 71,21))
-            self.progress = QProgressBar(self)
-            self.progress.setGeometry(0, 480, 735, 20)
             self.tx = QLabel("Insira a URL ->", self)
             self.tx.move(120,265)
             self.tx.setFont(QFont('Monospace', 11))
@@ -109,7 +107,10 @@ class Window(QMainWindow):
             self.linha2.move(0, 375)
             self.linha2.resize(1000, 20)
             self.show()
-                
+        def loading(self):
+            self.progress = QProgressBar(self)
+            self.progress.setGeometry(0, 480, 735, 20)
+            self.show()
         def iniciar_video(self, estado='normal', lista='False'):
                 global link
                 if lista == 'True':
@@ -219,7 +220,7 @@ class Window(QMainWindow):
             f = file(str(source_arquivo))
             f2 = f.name.split('.')
             source_formato = f2[1]
-            print 'Arquivo inicial : ' + source_arquivo + '\nFormato inicial ----> ' + tipo + '\nFormato final ---->' + source_formato
+            print 'Arquivo inicial : ' + source_arquivo + '\nFormato inicial ----> ' + source_formato + '\nFormato final ---->' + tipo
             self.msg = QMessageBox()
             self.msg.setIcon(QMessageBox.Information)
             self.msg.setText("A seguir, escolha um nome para seu arquivo.")
@@ -234,23 +235,24 @@ class Window(QMainWindow):
                 if tipo == 'avi' or tipo == 'mkv' or tipo == 'wmv' or tipo == 'mov':
                     #The '"{}"' bypass windows error by space ( O código '"{}"' faz com que o windows não bugue na hora de encontrar o arquivo e pasta como nomes separados, ex : "C:\Users\Video de luta.mp4"
                     source_arquivo_final = '"{}"'.format(source_arquivo)
-                    print source_arquivo_final
-                    print tipo
-                    print final_dos_finais
                     af = arquivo_final + '.' + tipo
                     final_dos_finais = '"{}"'.format(af)
                     convert_command = 'ffmpeg -i {} {}'.format(str(source_arquivo_final), str(final_dos_finais))
+                    #LOG
+                    print '1.[*] Arquivo iniciado ----> {}'.format(source_arquivo_final)
+                    print '\n2.[*] Arquivo adicionado em extensão {}---->{}'.format(af, tipo)
+                    print '\n3.[*] Arquivo final ---->{}'.format(final_dos_finais)
+                    print '\n4.[*] Iniciando comando : {}'.format(convert_command)
+                    #LOG
                     os.system(convert_command)
+                    print '\n5.[*] Finalizado'                
                 elif tipo == 'aac' or tipo == 'flac' or tipo == 'wma':
                     source_arquivo_final = '"{}"'.format(source_arquivo)
-                    print source_arquivo_final
-                    print tipo
-                    print final_dos_finais
                     af = arquivo_final + '.' + tipo
                     final_dos_finais = '"{}"'.format(af)
                     convert_command = 'ffmpeg -i {} {}'.format(str(source_arquivo_final), str(final_dos_finais))
                     os.system(convert_command)
-                  
+                #continue
                     
                 
             #if tipo == False:
@@ -276,7 +278,6 @@ class Window(QMainWindow):
             if x >= 3:
                 self.tx5.clear()
             global source_arquivo
-            time.sleep(1)
             source_arquivo = QFileDialog.getOpenFileName()
             print 'Arquivo selecionado -->' + source_arquivo + '\n'
             self.tx5 = QLabel(source_arquivo, self)
