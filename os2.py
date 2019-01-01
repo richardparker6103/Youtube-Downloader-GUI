@@ -1,26 +1,27 @@
 # -*- coding: utf-8 -*-
+
 import os
 import argparse
 import sys
 
 pasta_local = os.path.expanduser('~/') + 'Desktop/'
-
+disk_path = 'E:/'
 
 def baixar_video(link):
     yt = os.system('youtube-dl --format mp4 %s' % link)
 def baixar_audio(link):
     yt = os.system('youtube-dl -x --audio-format mp3 %s' % link)
 def enviar(destino):
-	if metodo == 'audio':
-		cp = os.system('move *.mp3 %s' %destino)
-		if cp == 1:
-			exit('\n[*]O arquivo nao pode ser enviado\n')
-    		print 'Arquivo enviado para %s' % destino
-    	else:
-		cp = os.system('move *.mp4 %s' %destino)
-		if cp == 1:
-			exit('\n[*]O arquivo nao pode ser enviado\n')
-		print 'Arquivo enviado para %s' % destino
+    if metodo == 'audio':
+        cp = os.system('move *.mp3 %s' %destino)
+        if cp == 1:
+            exit('\n[*]O arquivo nao pode ser enviado\n')
+        print 'Arquivo enviado para %s'
+    else:
+        cp = os.system('move *.mp4 %s' %destino)
+        if cp == 1:
+            exit('\n[*]O arquivo nao pode ser enviado\n')
+        print 'Arquivo enviado para %s' % destino
 		
 if __name__=="__main__":
     if len(sys.argv) < 2:
@@ -40,14 +41,14 @@ if __name__=="__main__":
         metodo = 'video'
         baixar_video(link)
         if pendrive:
-            enviar('E:/')
+            enviar(disk_path)
         else:
             enviar(pasta_local)
     if audio:
         metodo = 'audio'
         baixar_audio(link)
         if pendrive:
-            enviar('E:/')
+            enviar(disk_path)
         else:
             enviar(pasta_local)
 
