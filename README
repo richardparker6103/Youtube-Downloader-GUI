@@ -23,5 +23,3 @@ FFMPEG -> (ffmpeg, ffplay, ffprobe) https://www.ffmpeg.org/download.html
 LIBAV -> (to avoid with ffmpeg)
 youtube-dl.exe (for download and file conversion) -> https://youtube-dl.org/
 PyQt library for GUI editing -> https://sourceforge.net/projects/pyqt/files/PyQt4/
-
-
