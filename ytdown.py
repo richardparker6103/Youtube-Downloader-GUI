@@ -24,10 +24,9 @@ import time
 from os2 import *
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-
-l = []
     
-
+#Variáveis para esconder o conteúdo de saida dos comandos de download -> iniciar_video() iniciar_audio()
+#Comandos de conversão mostram a saída em uma tela cmd
 #Hide output console while downloading
 si = subprocess.STARTUPINFO()
 si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
@@ -40,18 +39,18 @@ local_path = os.getcwd()
     
 class Window(QMainWindow):
         def __init__(self):
-                super(Window, self).__init__()
-                self.setGeometry(50,50,700,500)
-                self.setWindowTitle('Python Youtube Downloader')
-                self.setWindowIcon(QIcon('ytbico.ico'))                   
-                extractAction = QAction("Sobre", self)
-                extractAction.setShortcut("Ctrl+Q")
-                extractAction.setStatusTip('Ler varios objetos a partir de um arquivo de texto')
-                extractAction.triggered.connect(self.about)
-                mainMenu = self.menuBar()
-                fileMenu = mainMenu.addMenu('Arquivo')
-                fileMenu.addAction(extractAction)
-                self.home()
+            super(Window, self).__init__()
+            self.setGeometry(50,50,700,500)
+            self.setWindowTitle('Python Youtube Downloader')
+            self.setWindowIcon(QIcon('ytbico.ico'))                   
+            extractAction = QAction("Sobre", self)
+            extractAction.setShortcut("Ctrl+Q")
+            extractAction.setStatusTip('Ler varios objetos a partir de um arquivo de texto')
+            extractAction.triggered.connect(self.about)
+            mainMenu = self.menuBar()
+            fileMenu = mainMenu.addMenu('Arquivo')
+            fileMenu.addAction(extractAction)
+            self.home()
         def home(self):
             global tipo
             self.pic = QLabel(self)
@@ -119,116 +118,109 @@ class Window(QMainWindow):
             self.seta1.move(410, 333)
             self.seta1.resize(20,20)
             self.seta1.setFont(QFont('Monospace', 10))
-            painter = QPainter(self)
-            painter.setPen(QPen(Qt.black, 10, Qt.SolidLine))
-            painter.drawRect(100, 15, 400, 200)
             #LOCK SIZE ( Não aumentar o tamanho da janela )
             self.setFixedSize(self.size())
-            
             self.showMaximized()
 
         def paintEvent(self, e):
+            #Retangulo design
             painter = QPainter(self)
             painter.setPen(QPen(Qt.black,2, Qt.SolidLine))
             painter.drawRect(10, 30, 680, 460)
         
         def iniciar_video(self, estado='normal', lista='False'):
-            try:
-                global link
-                #Mouse wait ()
-                QApplication.setOverrideCursor(Qt.WaitCursor)
-                if lista == 'True':
-                    link = k
-                    subprocess.call('python os2.py -v -l %s' %link, creationflags=CREATE_NO_WINDOW)
-                else:
-                    link = self.textbox.text()
-                    if len(link) < 40:
-                        self.msg = QMessageBox()
-                        self.msg.setIcon(QMessageBox.Information)
-                        self.msg.setText("O link '{}' é invalido, por favor digite novamente.".format(str(link)))
-                        self.msg.setWindowTitle('Python Youtube Downloader')
-                        self.msg.setWindowIcon(QIcon('ytbico.ico'))
-                        self.msg.exec_()
-                    else:
-                        subprocess.call('python os2.py -v -l %s' %link, creationflags=CREATE_NO_WINDOW)
-                        if lista == 'False':
-                            self.msg = QMessageBox()
-                            self.msg.setIcon(QMessageBox.Information)
-                            self.msg.setText("Vídeo salvo na área de trabalho")
-                            self.msg.setWindowTitle('Python Youtube Downloader')
-                            self.msg.setWindowIcon(QIcon('ytbico.ico'))
-                            self.msg.exec_()                                  
-                        else:
-                            pass
-            finally:
-                #Restore the current mouse
-                QApplication.restoreOverrideCursor()
-                     
-        def iniciar_audio_pendrive(self):
-                global disk_path
-                if self.d.isChecked():
-                    disk_path = 'D:/'
-                elif self.f.isChecked():
-                    disk_path = 'F:/'
-                else:
-                    disk_path = 'E:/'
+            global link
+            #Se existir um arquivo com links, troque a variavel $link para cada valor no arquivo com links, k.
+            if lista == 'True':
+                link = k
+                subprocess.call('python os2.py -v -l %s' %link, creationflags=CREATE_NO_WINDOW)
+            else:
                 link = self.textbox.text()
-                try:
-                    s = os.chdir(disk_path)
-                    os.chdir(local_path)
-                    subprocess.call('python os2.py -a -p -l %s' %link, creationflags=CREATE_NO_WINDOW)
+                #Se o conteúdo do texto $link for nulo ou menor que 40, alerte o erro de entrada.
+                if len(link) < 40:
                     self.msg = QMessageBox()
                     self.msg.setIcon(QMessageBox.Information)
+                    self.msg.setText("O link '{}' é invalido, por favor digite novamente.".format(str(link)))
                     self.msg.setWindowTitle('Python Youtube Downloader')
-                    self.msg.setText("O arquivo MP3 foi salvo no pendrive %s" %disk_path)
                     self.msg.setWindowIcon(QIcon('ytbico.ico'))
-                    self.msg.exec_()                     
-                except WindowsError:
-                    global x
-                    x = x + 1
-                    self.msg2 = QMessageBox()
-                    self.msg2.setIcon(QMessageBox.Information)
-                    self.msg2.setWindowTitle('Python Youtube Downloader')
-                    self.msg2.setText('Dispositivo {} desconectado, conecte e tente novamente.'.format(disk_path))
-                    self.msg2.setWindowIcon(QIcon('ytbico.ico'))
-                    self.msg2.exec_()
+                    self.msg.exec_()
+                else:
+                    #Subprocess = objeto para execução de comandos em segundo plano junto com a variável CREATE_NO_WINDOW
+                    subprocess.call('python os2.py -v -l %s' %link, creationflags=CREATE_NO_WINDOW)
+                    if lista == 'False':
+                        self.msg = QMessageBox()
+                        self.msg.setIcon(QMessageBox.Information)
+                        self.msg.setText("Vídeo salvo na área de trabalho")
+                        self.msg.setWindowTitle('Python Youtube Downloader')
+                        self.msg.setWindowIcon(QIcon('ytbico.ico'))
+                        self.msg.exec_()                                  
+                    else:
+                        pass
+                     
+        def iniciar_audio_pendrive(self):
+            global disk_path
+            #Caixinhas para selecionar o dispositivo
+            if self.d.isChecked():
+                disk_path = 'D:/'
+            elif self.f.isChecked():
+                disk_path = 'F:/'
+            else:
+                disk_path = 'E:/'
+            link = self.textbox.text()
+            try:
+                #Tenta entrar no diretório do dispositivo, caso haja algum error é porque ele não foi conectado.
+                s = os.chdir(disk_path)
+                os.chdir(local_path)
+                subprocess.call('python os2.py -a -p -l %s' %link, creationflags=CREATE_NO_WINDOW)
+                self.msg = QMessageBox()
+                self.msg.setIcon(QMessageBox.Information)
+                self.msg.setWindowTitle('Python Youtube Downloader')
+                self.msg.setText("O arquivo MP3 foi salvo no pendrive %s" %disk_path)
+                self.msg.setWindowIcon(QIcon('ytbico.ico'))
+                self.msg.exec_()                     
+            except WindowsError:
+                global x
+                x = x + 1
+                self.msg2 = QMessageBox()
+                self.msg2.setIcon(QMessageBox.Information)
+                self.msg2.setWindowTitle('Python Youtube Downloader')
+                self.msg2.setText('Dispositivo {} desconectado, conecte e tente novamente.'.format(disk_path))
+                self.msg2.setWindowIcon(QIcon('ytbico.ico'))
+                self.msg2.exec_()
                     
                 
 
                 
         def iniciar_audio(self, estado='normal', lista='False'):
-            try:
-                QApplication.setOverrideCursor(Qt.WaitCursor)
-                if lista == 'True':
-                    link = k
-                    if estado == 'pnd':
-                        subprocess.call('python os2.py -a -p -l %s' %link, creationflags=CREATE_NO_WINDOW)
-                    else:
-                        subprocess.call('python os2.py -a -l %s' %link, creationflags=CREATE_NO_WINDOW)
+            if lista == 'True':
+                link = k
+                if estado == 'pnd':
+                    subprocess.call('python os2.py -a -p -l %s' %link, creationflags=CREATE_NO_WINDOW)
                 else:
-                    link = self.textbox.text()
-                    if len(link) < 40:
+                    subprocess.call('python os2.py -a -l %s' %link, creationflags=CREATE_NO_WINDOW)
+            else:
+                link = self.textbox.text()
+                if len(link) < 40:
+                    self.msg = QMessageBox()
+                    self.msg.setIcon(QMessageBox.Information)
+                    self.msg.setText("O link '{}' inválido, por favor, digite um link valido.".format(str(link)))
+                    self.msg.setWindowTitle('Python Youtube Downloader')
+                    self.msg.setWindowIcon(QIcon('ytbico.ico'))
+                    self.msg.show()
+                else:
+                    subprocess.call('python os2.py -a -l %s' %link, creationflags=CREATE_NO_WINDOW)
+                    if lista == 'False':
                         self.msg = QMessageBox()
                         self.msg.setIcon(QMessageBox.Information)
-                        self.msg.setText("O link '{}' inválido, por favor, digite um link valido.".format(str(link)))
+                        self.msg.setText("Vídeo salvo na área de trabalho")
                         self.msg.setWindowTitle('Python Youtube Downloader')
                         self.msg.setWindowIcon(QIcon('ytbico.ico'))
-                        self.msg.show()
+                        self.msg.exec_()                                  
                     else:
-                        subprocess.call('python os2.py -a -l %s' %link, creationflags=CREATE_NO_WINDOW)
-                        if lista == 'False':
-                            self.msg = QMessageBox()
-                            self.msg.setIcon(QMessageBox.Information)
-                            self.msg.setText("Vídeo salvo na área de trabalho")
-                            self.msg.setWindowTitle('Python Youtube Downloader')
-                            self.msg.setWindowIcon(QIcon('ytbico.ico'))
-                            self.msg.exec_()                                  
-                        else:
-                            pass
-            finally:
-                QApplication.setOverrideCursor(Qt.WaitCursor)
+                        pass
 
         def iniciar_conversao(self):
+            #Variável $tipo serve para identificar o formato final definido pelo usuário
             if self.avi.isChecked():
                 tipo = 'avi'
             elif self.wmv.isChecked():
@@ -245,8 +237,10 @@ class Window(QMainWindow):
                 tipo = 'flac'
             elif self.mp3.isChecked():
                 tipo = 'mp3'                
-                    
+
+            #Abra o arquivo principal        
             f = file(str(source_arquivo))
+            #Descubra o formato do arquivo principal
             f2 = f.name.split('.')
             source_formato = f2[1]
             print 'Arquivo inicial : ' + source_arquivo + '\nFormato inicial ----> ' + source_formato + '\nFormato final ---->' + tipo
@@ -256,6 +250,7 @@ class Window(QMainWindow):
             self.msg.setWindowTitle('Python Youtube Downloader')
             self.msg.setWindowIcon(QIcon('ytbico.ico'))
             self.msg.exec_()
+            #Escolha o arquivo_final, e o local onde irá ser salvo.
             arquivo_final = QFileDialog.getSaveFileName(self, 'Save File')
             asp = QMessageBox.question(Window(), 'Deseja prosseguir ?',  'Arquivo: {}\nFormato inicial: {}\nFormato final: {}'
                                        .format(str(source_arquivo),str(source_formato), str(tipo)), QMessageBox.Yes, QMessageBox.No)
@@ -263,17 +258,22 @@ class Window(QMainWindow):
                 print tipo
                 if tipo == 'avi' or tipo == 'mkv' or tipo == 'wmv' or tipo == 'mov' or tipo =='aac' or tipo == 'flac' or tipo == 'wma' or tipo == 'mp3':
                     
-                    """ The '"{}"' bypass windows error by space ( O código '"{}"' faz com que o windows não bugue
-                    na hora de encontrar o
+                    """ O código '"{}"' faz com que o windows não bugue na hora de encontrar o
                     arquivo e pasta como nomes
-                    separados, ex : "C:\Users\Video de luta.mp4
+                    separados, ex : C:\Users\Video de luta.mp4 ou C:/Users/Documents/Shared and Shares/video.mp4
+                    pois ficaria : ffmpeg -i C:\Users\Documents\Shares and Shares\video.mp4 ocasionando erro por razão dos espaços entre as pastas.
+                    
+                    source_arquivo_final = Arquivo de origem modificado com adição de aspas para evitar erro do ffmpeg.exe 
+                    arquivo_final = Nome dado pelo usuário ao arquivo que irá ser salvo
+                    af = Modificação da variável $arquivo_final, acrescentando o .(extensão)
+                    final_dos_finais = Por fim, modifica a variável $af adicionando aspas para evitar o erro do ffmpeg.exe
                     """
                     source_arquivo_final = '"{}"'.format(source_arquivo)
                     af = arquivo_final + '.' + tipo
                     final_dos_finais = '"{}"'.format(af)
                     convert_command = 'ffmpeg -i {} {}'.format(str(source_arquivo_final), str(final_dos_finais))
                     #LOG
-                    print '1.[*] Arquivo iniciado ----> {}'.format(source_arquivo_final)
+                    print '\n1.[*] Arquivo iniciado ----> {}'.format(source_arquivo_final)
                     print '\n2.[*] Analisando extensão de arquivo {}---->{}'.format(af, tipo)
                     print '\n3.[*] Arquivo final ---->{}'.format(final_dos_finais)
                     print '\n4.[*] Iniciando comando : {}'.format(convert_command)
@@ -286,27 +286,13 @@ class Window(QMainWindow):
                     self.msg.setWindowTitle('Python Youtube Downloader')
                     self.msg.setText("Arquivo final \nsalvo em {}".format(final_dos_finais))
                     self.msg.show()
-                    
-            #if tipo == False:
-              #  self.msg = QMessageBox()
-                #self.msg.setIcon(QMessageBox.Information)
-                #self.msg.setText("Selecione o arquivo e escolha o formato desejado !")
-                #self.msg.setWindowTitle('Python Youtube Downloader')
-                #self.msg.setWindowIcon(QIcon('ytbico.ico'))
-                #self.msg.show()
-            #else:
-             #   print 'Formato de arquivo: %s' %tipo
-             #   exit()
-             #   if tipo=='video':
-             #       convert_command = 'ffmpeg -i {} -b:v 16M -vcodec h264 -acodec aac -strict -2 {}'.format(str(arquivo), str(destino))
-             #   else:
-              #      convert_command = 'ffmpeg -i {} -b:a 16M -acodec libmp3lame {}'.format(str(arquivo), str(destino))
-                
-            
+                                
         def browse_convert(self):
             global x
             x += 1
+            #self.tx5 variável de ambiente, mostra a path onde o arquivo foi aberto, ex: "C:/users/usuario/desktop/mktp.mp3"
             #Clear the content before repeat ( limpa o conteudo da variável self.tx5 antes de preencher outra em caso de erro do usuario )
+            #Se o numero de repetições for igual a 2, então a variável é zerada.
             if x >= 3:
                 self.tx5.clear()
             global source_arquivo
@@ -322,6 +308,7 @@ class Window(QMainWindow):
             
 
         def about(self):
+            #Mensagem README
             self.msgt = QMessageBox()
             self.msgt.setIcon(QMessageBox.Information)
             self.msgt.setWindowTitle('Python Youtube Downloader')
@@ -372,6 +359,7 @@ Link do projeto: https://github.com/richardparker6103/ytdown/blob/master/
                 if asp == QMessageBox.Yes:
                     asp23 = QMessageBox.question(Window(), 'Python Youtube Downloader', 'Você deseja baixar somente MP3 ?', QMessageBox.Yes, QMessageBox.No)
                     if asp23 == QMessageBox.No:
+                        #k = linhas no arquivo aberto, para cada link contido, faça executar o comando principal
                         for k in lines:
                             self.iniciar_video('normal', 'True')
                         self.msgt2 =QMessageBox()
