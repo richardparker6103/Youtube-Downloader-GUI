@@ -15,8 +15,10 @@ hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML,
 def download_pkg(package):
         if package == 'ffmpeg':
                 file_name = 'ffmpeg.zip'
+                link = ffmpeg_link
         else:
                 file_name = 'pyqt4.exe'
+                link = pyqt4_link
         r = requests.get(link, stream=True, headers=hdr)
 
         with open(file_name, 'wb') as f:
@@ -26,4 +28,22 @@ def download_pkg(package):
                                 f.write(chunk)
                                 f.flush()
                             
+fc = os.system('ffmpeg -h > NUL')
+if fc == 1:
+       print "[*] FFmpeg nao encontrado, baixando..."
+       time.sleep(3)
+       download_pkg('ffmpeg')
+       print '[*] Concluido'
+else:
+       print '[*] FFmpeg encontrado .'
+       
+try:
+       import PyQt4
+except ImportError:
+       print "[*] PyQt4 nao instalado, baixando..."
+       time.sleep(3)
+       download_pkg('pyqt4')
+       print '[*] Concluido'
+       
+       
 
