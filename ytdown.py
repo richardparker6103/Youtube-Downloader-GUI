@@ -1,4 +1,3 @@
-# -*- coding: cp1252 -*-
 #------------------README-------------------------
 # Necessário executáveis ffmpeg, ffprobe, ffplay 
 # Por falta de espaço do github, é necessário baixar manualmente os componentes no site:
@@ -19,8 +18,6 @@
 import sys
 import os
 import subprocess
-import mimetypes
-import time
 from os2 import *
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
