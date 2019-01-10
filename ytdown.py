@@ -1,3 +1,4 @@
+# -*- coding: cp1252 -*-
 #------------------README-------------------------
 # Necessário executáveis ffmpeg, ffprobe, ffplay 
 # Por falta de espaço do github, é necessário baixar manualmente os componentes no site:
@@ -18,9 +19,9 @@
 import sys
 import os
 import subprocess
-from os2 import *
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+from ytconsole import *
     
 #Variáveis para esconder o conteúdo de saida dos comandos de download -> iniciar_video() iniciar_audio()
 #Comandos de conversão mostram a saída em uma tela cmd
@@ -130,7 +131,7 @@ class Window(QMainWindow):
             #Se existir um arquivo com links, troque a variavel $link para cada valor no arquivo com links, k.
             if lista == 'True':
                 link = k
-                subprocess.call('python os2.py -v -l %s' %link, creationflags=CREATE_NO_WINDOW)
+                subprocess.call('python ytconsole.py -v -l %s' %link, creationflags=CREATE_NO_WINDOW)
             else:
                 link = self.textbox.text()
                 #Se o conteúdo do texto $link for nulo ou menor que 40, alerte o erro de entrada.
@@ -143,7 +144,7 @@ class Window(QMainWindow):
                     self.msg.exec_()
                 else:
                     #Subprocess = objeto para execução de comandos em segundo plano junto com a variável CREATE_NO_WINDOW
-                    subprocess.call('python os2.py -v -l %s' %link, creationflags=CREATE_NO_WINDOW)
+                    subprocess.call('python ytconsole.py -v -l %s' %link, creationflags=CREATE_NO_WINDOW)
                     if lista == 'False':
                         self.msg = QMessageBox()
                         self.msg.setIcon(QMessageBox.Information)
@@ -168,7 +169,7 @@ class Window(QMainWindow):
                 #Tenta entrar no diretório do dispositivo, caso haja algum error é porque ele não foi conectado.
                 s = os.chdir(disk_path)
                 os.chdir(local_path)
-                subprocess.call('python os2.py -a -p -l %s' %link, creationflags=CREATE_NO_WINDOW)
+                subprocess.call('python ytconsole.py -a -p -l %s' %link, creationflags=CREATE_NO_WINDOW)
                 self.msg = QMessageBox()
                 self.msg.setIcon(QMessageBox.Information)
                 self.msg.setWindowTitle('Python Youtube Downloader')
@@ -192,9 +193,9 @@ class Window(QMainWindow):
             if lista == 'True':
                 link = k
                 if estado == 'pnd':
-                    subprocess.call('python os2.py -a -p -l %s' %link, creationflags=CREATE_NO_WINDOW)
+                    subprocess.call('python ytconsole.py -a -p -l %s' %link, creationflags=CREATE_NO_WINDOW)
                 else:
-                    subprocess.call('python os2.py -a -l %s' %link, creationflags=CREATE_NO_WINDOW)
+                    subprocess.call('python ytconsole.py -a -l %s' %link, creationflags=CREATE_NO_WINDOW)
             else:
                 link = self.textbox.text()
                 if len(link) < 40:
@@ -205,7 +206,7 @@ class Window(QMainWindow):
                     self.msg.setWindowIcon(QIcon('ytbico.ico'))
                     self.msg.show()
                 else:
-                    subprocess.call('python os2.py -a -l %s' %link, creationflags=CREATE_NO_WINDOW)
+                    subprocess.call('python ytconsole.py -a -l %s' %link, creationflags=CREATE_NO_WINDOW)
                     if lista == 'False':
                         self.msg = QMessageBox()
                         self.msg.setIcon(QMessageBox.Information)
