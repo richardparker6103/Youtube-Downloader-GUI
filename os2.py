@@ -7,10 +7,29 @@ import sys
 pasta_local = os.path.expanduser('~/') + 'Desktop/'
 disk_path = 'E:/'
 
+def info(link):
+        try:
+                ydl = youtube_dl.YoutubeDL()
+                meta = ydl.extract_info(link, download=False)
+                #Global titulo, para nome final de arquivo
+                global titulo
+                titulo = meta['title']
+                #Converter segundos para minutos
+                m1 = meta['duration']
+                minutes = m1/60
+                print '\nTitulo: {}'.format(meta['title'])
+                print 'Duracao: {} segundos / {} minutos'.format(meta['duration'], int(minutes))
+                print 'Formato: {}'.format(meta['format'])
+                print 'Data de upload: {}'.format(meta['upload_date'])
+                print 'Uploader: {}'.format(meta['uploader'])
+                print 'Visualizacoes: {}'.format(meta['view_count'])
+        except TypeError:
+                exit("\n[*] Link invalido, impossivel obter informacoes")
+		
 def baixar_video(link):
-    yt = os.system('youtube-dl --format mp4 %s' % link)
+	yt = os.system('youtube-dl --format mp4 %s' % link)
 def baixar_audio(link):
-    yt = os.system('youtube-dl -x --audio-format mp3 %s' % link)
+    	yt = os.system('youtube-dl -x --audio-format mp3 %s' % link)
 def enviar(destino):
     if metodo == 'audio':
         cp = os.system('move *.mp3 %s' %destino)
