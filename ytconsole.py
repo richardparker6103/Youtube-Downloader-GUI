@@ -44,7 +44,7 @@ def enviar(destino):
 		
 if __name__=="__main__":
     if len(sys.argv) < 2:
-        exit("Uso: os2.py -l https://youtube.com/watch?video=7876asxXa87s")
+        exit("Uso: python ytconsole.py -l https://youtube.com/watch?video=7876asxXa87s")
     parser = argparse.ArgumentParser(prog="os2.py", usage="os2.py -l [YOUTUBE_LINK]")
     parser.add_argument("-l", "--link", help='selecione o link do video')
     parser.add_argument('-v', '--video', help='baixar somente video', action='store_true')
