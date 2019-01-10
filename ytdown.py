@@ -1,4 +1,4 @@
-# -*- coding: cp1252 -*-
+# coding: latin-1
 #------------------README-------------------------
 # Necessário executáveis ffmpeg, ffprobe, ffplay 
 # Por falta de espaço do github, é necessário baixar manualmente os componentes no site:
