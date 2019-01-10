@@ -1,25 +1,18 @@
 YtDown aplicativo para download e conversão de conteúdo do Youtube.
 
-Dispositivo padrão = E:/
-
-O dispositivo configurado pode ser alterado
-na varíavel disk_path em ytdown.py
-
 Para ver as bibliotecas necessárias consulte o arquivo README
 Link do projeto: https://github.com/richardparker6103/ytdown/blob/master/
 
-[PT-BR]
-Necessário executáveis ffmpeg, ffprobe, ffplay 
-Por falta de espaço do github, é necessário baixar manualmente os componentes no site:
+[PT-BR] - MANUAL
+Por restrição de tamanho do github, é necessário baixar manualmente os componentes no site:
+
 FFMPEG -> (ffmpeg, ffplay, ffprobe) https://www.ffmpeg.org/download.html
-LIBAV -> (para evitar conflitos com o ffmpeg)
-youtube-dl.exe(para download e conversão dos arquivos) -> https://youtube-dl.org/
 PyQt biblioteca para edição GUI -> https://sourceforge.net/projects/pyqt/files/PyQt4/
 
-[EN/US]
-Required executable ffmpeg, ffprobe, ffplay!
-For lack of space of github, is to download the media components on the site:
-FFMPEG -> (ffmpeg, ffplay, ffprobe) https://www.ffmpeg.org/download.html
-LIBAV -> (to avoid with ffmpeg)
-youtube-dl.exe (for download and file conversion) -> https://youtube-dl.org/
-PyQt library for GUI editing -> https://sourceforge.net/projects/pyqt/files/PyQt4/
+#######
+
+pip install youtube_dl
+
+//
+
+
