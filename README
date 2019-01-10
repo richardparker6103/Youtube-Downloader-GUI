@@ -9,10 +9,25 @@ Por restrição de tamanho do github, é necessário baixar manualmente os compo
 FFMPEG -> (ffmpeg, ffplay, ffprobe) https://www.ffmpeg.org/download.html
 PyQt biblioteca para edição GUI -> https://sourceforge.net/projects/pyqt/files/PyQt4/
 
-#######
+########################################
 
-pip install youtube_dl
+A variavel disk_path pode ser alterada em ytdown.py para quaisquer dispositivo ( E:/, D:/, C:/ )
 
-//
+[GUI] python2.7 ytdown.py
+
+[CONSOLE] 
+
+Baixar somente video: 
+
+python2.7 os2.py --video --link _LINK_ 
+python2.7 os2.py --video -p --link _LINK_ ( p=Send to disk_path )
+
+Baixar e extrair audio:
+
+python2.7 --audio --link _LINK_
+python2.7 --audio -p --link _LINK_ ( p= Send to disk_path )
+
+
+
 
 
