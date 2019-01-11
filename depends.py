@@ -32,10 +32,15 @@ def extract_():
         with zipfile.ZipFile('ffmpeg.zip', 'r') as zip_ref:
                 zip_ref.extractall('ffmpeg')                
                 print "[*] Extraindo ffmpeg, aguarde ..."
-                time.sleep(4)    
+                time.sleep(4)  
+              
+def copyffmpeg():
+       try:
+           os.makedirs('')
+       except OSError:
+           pass
 
 def main():
-        
         fc = os.system('ffmpeg -h > NUL')
         if fc == 1:
                if os.path.isfile('ffmpeg.zip') == True:
