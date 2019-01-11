@@ -1,3 +1,4 @@
+# coding: utf-8
 import time, os
 import requests, zipfile
 import shutil
@@ -31,38 +32,48 @@ def download_pkg(package):
                                 f.flush()
                             
 def extract_():
-        with zipfile.ZipFile('ffmpeg.zip', 'r') as zip_ref:
-                zip_ref.extractall('ffmpeg')                
-                print "[*] Extraindo ffmpeg, aguarde ..."
-                time.sleep(4)  
-              
+        try:
+                with zipfile.ZipFile('ffmpeg.zip', 'r') as zip_ref:
+                        zip_ref.extractall('ffmpeg')                
+                        print "[*] Extraindo ffmpeg, aguarde ..."
+                        time.sleep(4)  
+        except zipfile.BadZipfile:
+                print "[*] Arquivo zip corrompido, baixando novamente ... "
+                time.sleep(4)
+                download_pkg('ffmpeg')
+                extract_()
 def copyffmpeg():
         if not os.path.exists(current_dir + 'bin/'):
              os.makedirs(current_dir + 'bin/')
-        src = 'ffmpeg/ffmpeg-20190110-395e8a5-win64-static/bin/'
-        dest = current_dir + 'bin/'
+        src = 'ffmpeg/ffmpeg-20190109-ed3b644-win64-static/'
+        dest = current_dir + '/bin/'
         files = os.listdir(src)
         for f in files:
             shutil.move(src+f, dest)
         print "[*] Arquivos copiados para {}".format(dest)
 
 def main():
-        fc = os.system(current_dir + 'bin/ffmpeg.exe -h > NUL')
-        if fc == 1:
-               if os.path.isfile('ffmpeg.zip') == True:
-                       print "[*] zip file encontrado !"
-                       extract_()
-                       time.sleep(3)
-                       print '[*] Concluido.'
-               else:
-                       download_pkg('ffmpeg')
-                       extract_()
+        k = os.path.isfile('bin/ffmpeg.exe')
+        k2 = os.path.isfile('bin/ffprobe.exe')
+        if k == True and k2 == True:
+                print "[*] FFMPEG instalado."
+                time.sleep(3)
+        else:        
+                fc = os.system(current_dir + '/bin/ffmpeg.exe -h > NUL')
+                if fc == 1:
+                       if os.path.isfile('ffmpeg.zip') == True:
+                               print "[*] zip file encontrado !"
+                               extract_()
+                               time.sleep(3)
+                               print '[*] Concluido.'
+                       else:
+                               download_pkg('ffmpeg')
+                               extract_()
                      
-               copyffmpeg()   
-        else:
-               print '[*] FFmpeg encontrado .'
-               pass
-       
+                       copyffmpeg()   
+                else:
+                       print '[*] FFmpeg encontrado .'
+                       pass       
         try:
                import PyQt4
         except ImportError:
@@ -72,6 +83,9 @@ def main():
                print '[*] Concluido'
                time.sleep(3)
                os.system('pyqt4.exe')
+        else:
+                print "[*] PyQt4 instalado."
+                time.sleep(3)
 
 main()
        
