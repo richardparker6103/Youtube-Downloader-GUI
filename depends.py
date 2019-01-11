@@ -78,9 +78,17 @@ def main():
                print "[*] PyQt4 nao instalado, baixando..."
                time.sleep(3)
                download_pkg('pyqt4')
-               print '[*] Concluido'
                time.sleep(3)
                os.system('pyqt4.exe')
+               print '[*] Concluido'
+               print "[*] Removendo arquivo de instalacao ..."
+               time.sleep(3)
+               try:
+                       os.system('del pyqt4.exe')
+                       os.system('rmdir ffmpeg')
+                       os.system('del ffmpeg.zip')
+               except:
+                       pass
         else:
                 print "[*] PyQt4 instalado."
                 time.sleep(3)
