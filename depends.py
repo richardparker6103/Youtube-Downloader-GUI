@@ -1,4 +1,4 @@
-import os
+import time, os, requests, zipfile
 from clint.textui import progress
 
 pyqt4_link = 'https://ufpr.dl.sourceforge.net/project/pyqt/PyQt4/PyQt-4.10/PyQt4-4.10-gpl-Py2.7-Qt4.8.4-x64.exe'
@@ -28,22 +28,43 @@ def download_pkg(package):
                                 f.write(chunk)
                                 f.flush()
                             
-fc = os.system('ffmpeg -h > NUL')
-if fc == 1:
-       print "[*] FFmpeg nao encontrado, baixando..."
-       time.sleep(3)
-       download_pkg('ffmpeg')
-       print '[*] Concluido'
-else:
-       print '[*] FFmpeg encontrado .'
-       
-try:
-       import PyQt4
-except ImportError:
-       print "[*] PyQt4 nao instalado, baixando..."
-       time.sleep(3)
-       download_pkg('pyqt4')
-       print '[*] Concluido'
-       
-       
+def check_():
+        if os.path.isfile('ffmpeg.zip') == True:
+                with zipfile.ZipFile('ffmpeg.zip', 'r') as zip_ref:
+                        zip_ref.extractall('ffmpeg')
+                        print "[*] Extraindo ffmpeg, aguarde ..."
+                        time.sleep(4)
+                        return True
+        else:
+                download_pkg('ffmpeg')
+                extrair()
 
+
+
+def main():
+        
+        fc = os.system('ffmpeg -h > NUL')
+        if fc == 1:
+               if check_() == True:
+                       print "[*] zip file encontrado !"
+                       check_()
+                       time.sleep(3)
+                       print '[*] Concluido.'
+               else:
+                        check_()
+                        
+        else:
+               print '[*] FFmpeg encontrado .'
+               pass
+       
+        try:
+               import PyQt4
+        except ImportError:
+               print "[*] PyQt4 nao instalado, baixando..."
+               time.sleep(3)
+               download_pkg('pyqt4')
+               print '[*] Concluido'
+
+main()
+       
+       
