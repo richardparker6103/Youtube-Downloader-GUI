@@ -3,6 +3,7 @@ from clint.textui import progress
 
 pyqt4_link = 'https://ufpr.dl.sourceforge.net/project/pyqt/PyQt4/PyQt-4.10/PyQt4-4.10-gpl-Py2.7-Qt4.8.4-x64.exe'
 ffmpeg_link = 'https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-20190109-ed3b644-win64-static.zip'
+current_dir = os.getcwd()
 
 #Headers ( evita o erro 403 Forbidden )
 hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
@@ -35,13 +36,17 @@ def extract_():
                 time.sleep(4)  
               
 def copyffmpeg():
-       try:
-           os.makedirs('')
-       except OSError:
-           pass
+        if not os.path.exists(current_dir + 'bin/'):
+             os.makedirs(current_dir + 'bin/')
+        src = 'ffmpeg/ffmpeg-20190110-395e8a5-win64-static/bin/'
+        dest = current_dir + 'bin/'
+        files = os.listdir(src)
+        for f in files:
+            shutil.move(src+f, dest)
+        print "[*] Arquivos copiados para {}".format(dest)
 
 def main():
-        fc = os.system('ffmpeg -h > NUL')
+        fc = os.system(current_dir + 'bin/ffmpeg.exe -h > NUL')
         if fc == 1:
                if os.path.isfile('ffmpeg.zip') == True:
                        print "[*] zip file encontrado !"
@@ -51,6 +56,8 @@ def main():
                else:
                        download_pkg('ffmpeg')
                        extract_()
+                     
+               copyffmpeg()   
                         
         else:
                print '[*] FFmpeg encontrado .'
