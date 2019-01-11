@@ -23,7 +23,6 @@ def download_pkg(package):
                 file_name = 'pyqt4.exe'
                 link = pyqt4_link
         r = requests.get(link, stream=True, headers=hdr)
-
         with open(file_name, 'wb') as f:
                 total_length = int(r.headers.get('content-length'))
                 for chunk in progress.bar(r.iter_content(chunk_size=1024), expected_size=(total_length/1024) + 1): 
@@ -60,7 +59,6 @@ def main():
                        extract_()
                      
                copyffmpeg()   
-                        
         else:
                print '[*] FFmpeg encontrado .'
                pass
