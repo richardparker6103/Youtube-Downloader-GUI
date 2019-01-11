@@ -28,30 +28,24 @@ def download_pkg(package):
                                 f.write(chunk)
                                 f.flush()
                             
-def check_():
-        if os.path.isfile('ffmpeg.zip') == True:
-                with zipfile.ZipFile('ffmpeg.zip', 'r') as zip_ref:
-                        zip_ref.extractall('ffmpeg')
-                        print "[*] Extraindo ffmpeg, aguarde ..."
-                        time.sleep(4)
-                        return True
-        else:
-                download_pkg('ffmpeg')
-                extrair()
-
-
+def extract_():
+        with zipfile.ZipFile('ffmpeg.zip', 'r') as zip_ref:
+                zip_ref.extractall('ffmpeg')                
+                print "[*] Extraindo ffmpeg, aguarde ..."
+                time.sleep(4)    
 
 def main():
         
         fc = os.system('ffmpeg -h > NUL')
         if fc == 1:
-               if check_() == True:
+               if os.path.isfile('ffmpeg.zip') == True:
                        print "[*] zip file encontrado !"
-                       check_()
+                       extract_()
                        time.sleep(3)
                        print '[*] Concluido.'
                else:
-                        check_()
+                       download_pkg('ffmpeg')
+                       extract_()
                         
         else:
                print '[*] FFmpeg encontrado .'
@@ -64,6 +58,8 @@ def main():
                time.sleep(3)
                download_pkg('pyqt4')
                print '[*] Concluido'
+               time.sleep(3)
+               os.system('pyqt4.exe')
 
 main()
        
