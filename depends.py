@@ -1,4 +1,6 @@
-import time, os, requests, zipfile
+import time, os
+import requests, zipfile
+import shutil
 from clint.textui import progress
 
 pyqt4_link = 'https://ufpr.dl.sourceforge.net/project/pyqt/PyQt4/PyQt-4.10/PyQt4-4.10-gpl-Py2.7-Qt4.8.4-x64.exe'
