@@ -59,16 +59,21 @@ def main():
         else:        
                 fc = os.system(current_dir + '/ffmpeg.exe -h > NUL')
                 if fc == 1:
-                       if os.path.isfile('ffmpeg.zip') == True:
+                        if os.path.isfile('ffmpeg.zip') == True:
                                print "[*] zip file encontrado !"
                                extract_()
                                time.sleep(3)
                                print '[*] Concluido.'
-                       else:
+                        else:
                                download_pkg('ffmpeg')
                                extract_()
+                        try:
+                                os.system('del ffmpeg.zip')
+                                os.system('rmdir /s /q ffmpeg')
+                        except:
+                                pass
                      
-                       copyffmpeg()   
+                        copyffmpeg()   
                 else:
                        print '[*] FFmpeg encontrado .'
                        pass       
@@ -85,8 +90,6 @@ def main():
                time.sleep(3)
                try:
                        os.system('del pyqt4.exe')
-                       os.system('rmdir ffmpeg')
-                       os.system('del ffmpeg.zip')
                except:
                        pass
         else:
