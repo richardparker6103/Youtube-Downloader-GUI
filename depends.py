@@ -43,23 +43,21 @@ def extract_():
                 download_pkg('ffmpeg')
                 extract_()
 def copyffmpeg():
-        if not os.path.exists(current_dir + 'bin/'):
-             os.makedirs(current_dir + 'bin/')
-        src = 'ffmpeg/ffmpeg-20190109-ed3b644-win64-static/'
-        dest = current_dir + '/bin/'
+        src = 'ffmpeg/ffmpeg-20190109-ed3b644-win64-static/bin/'
+        dest = current_dir + '/'
         files = os.listdir(src)
         for f in files:
             shutil.move(src+f, dest)
         print "[*] Arquivos copiados para {}".format(dest)
 
 def main():
-        k = os.path.isfile('bin/ffmpeg.exe')
-        k2 = os.path.isfile('bin/ffprobe.exe')
+        k = os.path.isfile(current_dir + '/ffmpeg.exe')
+        k2 = os.path.isfile(current_dir + '/ffprobe.exe')
         if k == True and k2 == True:
                 print "[*] FFMPEG instalado."
                 time.sleep(3)
         else:        
-                fc = os.system(current_dir + '/bin/ffmpeg.exe -h > NUL')
+                fc = os.system(current_dir + '/ffmpeg.exe -h > NUL')
                 if fc == 1:
                        if os.path.isfile('ffmpeg.zip') == True:
                                print "[*] zip file encontrado !"
