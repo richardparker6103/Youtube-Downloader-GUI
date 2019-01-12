@@ -306,7 +306,7 @@ O dispositivo configurado pode ser alterado
 na varíavel disk_path em ytdown.py
 
 Para ver as bibliotecas necessárias consulte o arquivo README
-Link do projeto: https://github.com/richardparker6103/ytdown/blob/master/
+Link do projeto: https://github.com/richardparker6103/Youtube-Downloader-GUI/blob/master/
 """)
             self.msgt.setWindowIcon(QIcon('ytbico.ico'))
             self.msgt.show()           
