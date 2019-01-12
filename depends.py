@@ -1,4 +1,4 @@
-# coding: utf-8
+# coding: cp1252
 import time, os
 import requests, zipfile
 import shutil
