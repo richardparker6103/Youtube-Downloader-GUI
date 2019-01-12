@@ -3,18 +3,22 @@
 import sys
 import os
 import subprocess
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
 from ytconsole import *
     
 #Variáveis para esconder o conteúdo de saida dos comandos de download -> iniciar_video() iniciar_audio()
 #Comandos de conversão mostram a saída em uma tela cmd
 #Hide output console while downloading
+
 si = subprocess.STARTUPINFO()
 si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 CREATE_NO_WINDOW = 0x08000000
 
-example = 'https://www.youtube.com/watch?v=C0DPdy98e4c'
+#Faça a checkagem de arquivos antes de proesseguir...
+os.system('python depends.py')
+
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
+
 x = 1
 local_path = os.getcwd()
 
@@ -361,8 +365,7 @@ Link do projeto: https://github.com/richardparker6103/ytdown/blob/master/
                         self.msgt2.exec_()
                 
             
-        
-os.system('python depends.py')                 
+                
 app = QApplication(sys.argv)
 gui = Window()
 sys.exit(app.exec_())
