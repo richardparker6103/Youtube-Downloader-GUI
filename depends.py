@@ -35,11 +35,10 @@ def extract_():
         try:
                 with zipfile.ZipFile('ffmpeg.zip', 'r') as zip_ref:
                         zip_ref.extractall('ffmpeg')                
-                        print "[*] Extraindo ffmpeg, aguarde ..."
-                        time.sleep(4)  
+                        print "[*] Extraindo ffmpeg, aguarde ..."  
         except zipfile.BadZipfile:
                 print "[*] Arquivo zip corrompido, baixando novamente ... "
-                time.sleep(4)
+                time.sleep(2)
                 download_pkg('ffmpeg')
                 extract_()
 def copyffmpeg():
@@ -55,9 +54,9 @@ def main():
         k2 = os.path.isfile(current_dir + '/ffprobe.exe')
         if k == True and k2 == True:
                 print "[*] FFMPEG instalado."
-                time.sleep(3)
         else:        
                 fc = os.system(current_dir + '/ffmpeg.exe -h > NUL')
+                os.system('cls')
                 if fc == 1:
                         if os.path.isfile('ffmpeg.zip') == True:
                                print "[*] zip file encontrado !"
@@ -65,36 +64,32 @@ def main():
                                time.sleep(3)
                                print '[*] Concluido.'
                         else:
+                               print "[*] Baixando FFMPEG de --> {}".format(ffmpeg_link)
                                download_pkg('ffmpeg')
-                               extract_()
+                               extract_()                    
+                        copyffmpeg()
                         try:
                                 os.system('del ffmpeg.zip')
                                 os.system('rmdir /s /q ffmpeg')
                         except:
-                                pass
-                     
-                        copyffmpeg()   
+                                pass                        
                 else:
                        print '[*] FFmpeg encontrado .'
                        pass       
         try:
                import PyQt4
         except ImportError:
-               print "[*] PyQt4 nao instalado, baixando..."
-               time.sleep(3)
+               print "[*] PyQt4 nao instalado, baixando de --> {}".format(pyqt4_link)
                download_pkg('pyqt4')
-               time.sleep(3)
                os.system('pyqt4.exe')
                print '[*] Concluido'
                print "[*] Removendo arquivo de instalacao ..."
-               time.sleep(3)
                try:
                        os.system('del pyqt4.exe')
                except:
                        pass
         else:
                 print "[*] PyQt4 instalado."
-                time.sleep(3)
 
 main()
        
