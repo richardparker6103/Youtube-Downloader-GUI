@@ -362,7 +362,7 @@ Link do projeto: https://github.com/richardparker6103/ytdown/blob/master/
                 
             
         
-                
+os.system('python depends.py')                 
 app = QApplication(sys.argv)
 gui = Window()
 sys.exit(app.exec_())
