@@ -2,7 +2,7 @@
 ---------------------------
 ### Installing dependencies:
 
-`` `pip install -r requirements.txt```
+```pip install -r requirements.txt```
 
 ---------------------------
 
@@ -18,7 +18,7 @@ Or run the libraries installation file above.
 
 Finally open the main file
 
-`` `python ytdown.py```
+```python ytdown.py```
 
 [PT-BR] Youtube Downloader
 ---------------------------
