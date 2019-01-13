@@ -3,11 +3,13 @@
 import sys
 import os
 import subprocess
+import threading
 from ytconsole import *
     
 #Variaveis para esconder o conteudo de saida dos comandos de download -> iniciar_video() iniciar_audio()
 #Comandos de conversao mostram a saida em uma tela cmd
 #Hide output console while downloading
+
 
 si = subprocess.STARTUPINFO()
 si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
@@ -104,6 +106,8 @@ class Window(QMainWindow):
             self.seta1.move(410, 333)
             self.seta1.resize(20,20)
             self.seta1.setFont(QFont('Monospace', 10))
+            self.progress = QProgressBar(self)
+            self.progress.setGeometry(11.9, 479, 713, 10)
             #LOCK SIZE ( Nao aumentar o tamanho da janela )
             self.setFixedSize(self.size())
             self.showMaximized()
@@ -113,11 +117,10 @@ class Window(QMainWindow):
             painter = QPainter(self)
             painter.setPen(QPen(Qt.black,2, Qt.SolidLine))
             painter.drawRect(10, 30, 680, 460)
-        
         def iniciar_video(self, estado='normal', lista='False'):
             global link
             #Se existir um arquivo com links, troque a variavel $link para cada valor no arquivo com links, k.
-            if lista == 'True':
+            if lista == 'True':    
                 link = k
                 subprocess.call('python ytconsole.py -v -l %s' %link, creationflags=CREATE_NO_WINDOW)
             else:
@@ -132,7 +135,11 @@ class Window(QMainWindow):
                     self.msg.exec_()
                 else:
                     #Subprocess = objeto para execucao de comandos em segundo plano junto com a variavel CREATE_NO_WINDOW
+                    self.loading_cursor()
+                    self.progress_bar()
                     subprocess.call('python ytconsole.py -v -l %s' %link, creationflags=CREATE_NO_WINDOW)
+                    self.end_progress_bar()
+                    self.restore_cursor()
                     if lista == 'False':
                         self.msg = QMessageBox()
                         self.msg.setIcon(QMessageBox.Information)
@@ -142,7 +149,40 @@ class Window(QMainWindow):
                         self.msg.exec_()                                  
                     else:
                         pass
-                     
+        
+        def progress_bar(self):
+                self.completed = 0
+                while self.completed < 45:
+                        self.completed += 0.0001
+                        self.progress.setValue(self.completed)
+        def end_progress_bar(self):
+                self.completed = 45
+                while self.completed < 100:
+                        self.completed += 0.0001
+                        self.progress.setValue(self.completed)
+                
+        def slow_progress_bar(self): #Barra de progresso mais lenta, no caso de varios links no arquivo de entrada
+                self.completed = 0
+                while self.completed < 20:
+                        self.completed += 0.0001
+                        self.progress.setValue(self.completed)
+        def end_slow_progress_bar(self): # Final da funcao, para concluir a barra restante
+                self.completed = 20
+                while self.completed < 60:
+                        self.completed += 0.0001
+                        self.progress.setValue(self.completed)
+                self.completed = 60
+                while self.completed < 100:
+                        self.completed += 0.0001
+                        self.progress.setValue(self.completed)
+
+        def loading_cursor(self):
+                #Mouse loading...
+                load = QApplication.setOverrideCursor(Qt.WaitCursor)
+        def restore_cursor(self):
+                #Restore mouse
+                restore = QApplication.restoreOverrideCursor()
+                
         def iniciar_audio_pendrive(self):
             global disk_path
             #Caixinhas para selecionar o dispositivo
@@ -157,11 +197,15 @@ class Window(QMainWindow):
                 #Tenta entrar no diretorio do dispositivo, caso haja algum error e porque ele nao foi conectado.
                 s = os.chdir(disk_path)
                 os.chdir(local_path)
+                self.loading_cursor()
+                self.progress_bar()
                 subprocess.call('python ytconsole.py -a -p -l %s' %link, creationflags=CREATE_NO_WINDOW)
+                self.restore_cursor()
+                self.end_progress_bar()
                 self.msg = QMessageBox()
                 self.msg.setIcon(QMessageBox.Information)
                 self.msg.setWindowTitle('Python Youtube Downloader')
-                self.msg.setText("O arquivo MP3 foi salvo no pendrive %s" %disk_path)
+                self.msg.setText("O arquivo MP3 foi salvo no dispositivo %s" %disk_path)
                 self.msg.setWindowIcon(QIcon('ytbico.ico'))
                 self.msg.exec_()                     
             except WindowsError:
@@ -194,11 +238,15 @@ class Window(QMainWindow):
                     self.msg.setWindowIcon(QIcon('ytbico.ico'))
                     self.msg.show()
                 else:
+                    self.loading_cursor()
+                    self.progress_bar()
                     subprocess.call('python ytconsole.py -a -l %s' %link, creationflags=CREATE_NO_WINDOW)
+                    self.restore_cursor()
+                    self.end_progress_bar()
                     if lista == 'False':
                         self.msg = QMessageBox()
                         self.msg.setIcon(QMessageBox.Information)
-                        self.msg.setText("Video salvo na area de trabalho")
+                        self.msg.setText("Audio salvo na area de trabalho")
                         self.msg.setWindowTitle('Python Youtube Downloader')
                         self.msg.setWindowIcon(QIcon('ytbico.ico'))
                         self.msg.exec_()                                  
@@ -264,7 +312,11 @@ class Window(QMainWindow):
                     print '\n3.[*] Arquivo final ---->{}'.format(final_dos_finais)
                     print '\n4.[*] Iniciando comando : {}'.format(convert_command)
                     #LOG
-                    os.system(convert_command)
+                    self.loading_cursor()
+                    self.progress_bar()
+                    subprocess.call(convert_command, creationflags=CREATE_NO_WINDOW)
+                    self.restore_cursor()
+                    self.end_progress_bar()
                     print '\n5.[*] Finalizado'             
                     self.msg = QMessageBox()
                     self.msg.setIcon(QMessageBox.Information)
@@ -280,16 +332,27 @@ class Window(QMainWindow):
             #Clear the content before repeat ( limpa o conteudo da variavel self.tx5 antes de preencher outra em caso de erro do usuario )
             #Se o numero de repeticoes for igual a 2, entao a variavel e zerada.
             if x >= 3:
-                self.tx5.clear()
+                try:
+                        self.tx5.clear()
+                except:
+                        pass
             global source_arquivo
             source_arquivo = QFileDialog.getOpenFileName()
-            print 'Arquivo selecionado -->' + source_arquivo + '\n'
-            self.tx5 = QLabel("({})".format(source_arquivo), self)
-            #Resize for increase the text ( redimensionar o tamanho para aparecer todo o conteudo do texto )
-            self.tx5.resize(250,20)
-            self.tx5.move(2,455)
-            self.tx5.setFont(QFont('Verdana', 8))
-            self.tx5.show()
+            try:
+                    print 'Arquivo selecionado -->' + source_arquivo + '\n'
+                    self.tx5 = QLabel("({})".format(source_arquivo), self)
+                    #Resize for increase the text ( redimensionar o tamanho para aparecer todo o conteudo do texto )
+                    self.tx5.resize(250,20)
+                    self.tx5.move(12,455)
+                    self.tx5.setFont(QFont('Verdana', 8))
+                    self.tx5.show()                    
+            except UnicodeEncodeError: #Erro na hora de ler um arquivo de entrada, se houver acentos e caracteres especiais
+                    self.msg = QMessageBox()
+                    self.msg.setIcon(QMessageBox.Information)
+                    self.msg.setWindowIcon(QIcon('ytbico.ico'))
+                    self.msg.setWindowTitle('Python Youtube Downloader')
+                    self.msg.setText('O arquivo selecionado nao pode conter acentos e \ncaracteres especiais !')
+                    self.msg.show()
             
             
 
@@ -346,8 +409,12 @@ Link do projeto: https://github.com/richardparker6103/ytdown/blob/master/
                     asp23 = QMessageBox.question(Window(), 'Python Youtube Downloader', 'Voce deseja baixar somente MP3 ?', QMessageBox.Yes, QMessageBox.No)
                     if asp23 == QMessageBox.No:
                         #k = linhas no arquivo aberto, para cada link contido, faca executar o comando principal
+                        self.loading_cursor()
+                        self.slow_progress_bar()
                         for k in lines:
                             self.iniciar_video('normal', 'True')
+                        self.restore_cursor()
+                        self.end_slow_progress_bar()
                         self.msgt2 =QMessageBox()
                         self.msgt2.setIcon(QMessageBox.Information)
                         self.msgt2.setWindowTitle('Python Youtube Downloader')
@@ -363,9 +430,8 @@ Link do projeto: https://github.com/richardparker6103/ytdown/blob/master/
                         self.msgt2.setText("{} arquivos MP3 foram baixados, salvos na area de Trabalho".format(int(l)))
                         self.msgt2.setWindowIcon(QIcon('ytbico.ico'))
                         self.msgt2.exec_()
-                
-            
-                
+                            
+              
 app = QApplication(sys.argv)
 gui = Window()
 sys.exit(app.exec_())
