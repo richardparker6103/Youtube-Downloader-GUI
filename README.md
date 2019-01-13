@@ -1,4 +1,26 @@
-Youtube Downloader
+[EN] Youtube Downloader
+---------------------------
+### Installing dependencies:
+
+`` `pip install -r requirements.txt```
+
+---------------------------
+
+Before running the main file, check it out and see if all components
+installed, they are:
+
+FFMPEG -> https://www.ffmpeg.org/
+PyQt4 -> https://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.10/
+
+Or run the libraries installation file above.
+
+`` `python depends.py```
+
+Finally open the main file
+
+`` `python ytdown.py```
+
+[PT-BR] Youtube Downloader
 ---------------------------
 ### Instalando dependencias:
 
