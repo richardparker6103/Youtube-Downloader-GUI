@@ -14,7 +14,7 @@ PyQt4 -> https://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.10/
 
 Or run the libraries installation file above.
 
-`` `python depends.py```
+```python depends.py```
 
 Finally open the main file
 
