@@ -6,7 +6,7 @@ clint
 bs4
 progress
 
-Todas elas estao no arquivo requirements.txt, para instalar elas digite: pip install -r requirements.tx
+Todas elas estao no arquivo requirements.txt, para instalar elas digite: pip install -r requirements.txt
 
 
 
