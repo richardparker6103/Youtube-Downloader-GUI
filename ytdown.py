@@ -282,7 +282,7 @@ class Window(QMainWindow):
             if x >= 3:
                 self.tx5.clear()
             global source_arquivo
-            source_arquivo = QFileDialog.getOpenFileName()
+            source_arquivo = QFileDialog.getOpenFileName().decode('cp1252')
             print 'Arquivo selecionado -->' + source_arquivo + '\n'
             self.tx5 = QLabel("({})".format(source_arquivo), self)
             #Resize for increase the text ( redimensionar o tamanho para aparecer todo o conteúdo do texto )
