@@ -34,7 +34,7 @@ class Window(QMainWindow):
             extractAction.setStatusTip('Ler varios objetos a partir de um arquivo de texto')
             extractAction.triggered.connect(self.about)
             mainMenu = self.menuBar()
-            fileMenu = mainMenu.addMenu('Arquivo')
+            fileMenu = mainMenu.addMenu('Ajuda')
             fileMenu.addAction(extractAction)
             self.home()
         def home(self):
