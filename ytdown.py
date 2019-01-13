@@ -298,7 +298,7 @@ class Window(QMainWindow):
             self.msgt = QMessageBox()
             self.msgt.setIcon(QMessageBox.Information)
             self.msgt.setWindowTitle('Python Youtube Downloader')
-            self.msgt.setText("""YtDown aplicativo para download e conversao de conteudo do Youtube.
+            self.msgt.setText("""Aplicativo para download e conversao de conteudo do Youtube.
 
 Dispositivo padrao = E:/
 
