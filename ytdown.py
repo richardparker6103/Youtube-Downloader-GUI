@@ -312,11 +312,9 @@ class Window(QMainWindow):
                     print '\n3.[*] Arquivo final ---->{}'.format(final_dos_finais)
                     print '\n4.[*] Iniciando comando : {}'.format(convert_command)
                     #LOG
-                    self.loading_cursor()
-                    self.progress_bar()
-                    subprocess.call(convert_command, creationflags=CREATE_NO_WINDOW)
+                    self.loading_cursor()                
+                    os.system(convert_command)
                     self.restore_cursor()
-                    self.end_progress_bar()
                     print '\n5.[*] Finalizado'             
                     self.msg = QMessageBox()
                     self.msg.setIcon(QMessageBox.Information)
