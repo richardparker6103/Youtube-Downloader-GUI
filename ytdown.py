@@ -41,19 +41,21 @@ class Window(QMainWindow):
             self.home()
         def home(self):
             global tipo
+            # Imagem principal
             self.pic = QLabel(self)
             self.pic.setPixmap(QPixmap('ytbico.ico'))
             self.pic.setGeometry(234,-120,480,480)
+            # Botoes
             self.button = QPushButton('Somente video', self)
-            self.button.clicked.connect(self.iniciar_video)
+            self.button.clicked.connect(self.start_video)
             self.button.resize(100,30)
             self.button.move(260,280)
             self.button2 = QPushButton('Somente audio', self)
-            self.button2.clicked.connect(self.iniciar_audio)
+            self.button2.clicked.connect(self.start_audio)
             self.button2.move(380,280)
             self.button2.resize(100, 30)
             self.button4 = QPushButton('Baixar em \ndispositivo', self)
-            self.button4.clicked.connect(self.iniciar_audio_pendrive)
+            self.button4.clicked.connect(self.start_on_device)
             self.button4.resize(80,35)
             self.button4.move(315,330)
             self.button5 = QPushButton('Selecionar arquivo...', self)
@@ -61,16 +63,18 @@ class Window(QMainWindow):
             self.button5.resize(121,30)
             self.button5.move(30,420)
             self.button6 = QPushButton('Iniciar', self)
-            self.button6.clicked.connect(self.iniciar_conversao)
+            self.button6.clicked.connect(self.start_convert)
             self.button6.resize(60,40)
             self.button6.move(600,420)
             self.button7 = QPushButton('Abrir lista...', self)
             self.button7.clicked.connect(self.browse)
             self.button7.resize(75,26)
             self.button7.move(520,238)
+            # Entrada de texto para entrada da variavel link
             self.textbox = QLineEdit(self)
             self.textbox.move(230, 240)
             self.textbox.resize(270,25)
+            # Caixinhas
             self.e = QCheckBox('E:/ (padrao)', self)
             self.e.setGeometry(QRect(440,320, 100, 21))
             self.d = QCheckBox('D:/', self)
@@ -93,19 +97,20 @@ class Window(QMainWindow):
             self.mp3.setGeometry(QRect(300, 460, 71,21))
             self.flac = QCheckBox('FLAC', self)
             self.flac.setGeometry(QRect(300, 440, 71,21))
+            # Textos do app
             self.tx = QLabel("Insira a URL ->", self)
             self.tx.move(110,235)
             self.tx.setFont(QFont('Monospace', 11))
             self.tx2 = QLabel("Converter para: ", self)
             self.tx2.move(200,420)
-            self.linha2 = QLabel('  ___________________________________Conversor de Ext.___________________________________ ', self)
-            self.linha2.move(0, 375)
-            self.linha2.resize(1000, 20)
-            self.linha2.setFont(QFont('Verdana', 10))
-            self.seta1 = QLabel('-->', self)
-            self.seta1.move(410, 333)
-            self.seta1.resize(20,20)
-            self.seta1.setFont(QFont('Monospace', 10))
+            self.line1 = QLabel('  ___________________________________Conversor de Ext.___________________________________ ', self)
+            self.line1.move(0, 375)
+            self.line1.resize(1000, 20)
+            self.line1.setFont(QFont('Verdana', 10))
+            self.arrow1 = QLabel('-->', self)
+            self.arrow1.move(410, 333)
+            self.arrow1.resize(20,20)
+            self.arrow1.setFont(QFont('Monospace', 10))
             self.progress = QProgressBar(self)
             self.progress.setGeometry(11.9, 479, 713, 10)
             #LOCK SIZE ( Nao aumentar o tamanho da janela )
@@ -117,7 +122,7 @@ class Window(QMainWindow):
             painter = QPainter(self)
             painter.setPen(QPen(Qt.black,2, Qt.SolidLine))
             painter.drawRect(10, 30, 680, 460)
-        def iniciar_video(self, estado='normal', lista='False'):
+        def start_video(self, estado='normal', lista='False'):
             global link
             #Se existir um arquivo com links, troque a variavel $link para cada valor no arquivo com links, k.
             if lista == 'True':    
@@ -183,7 +188,7 @@ class Window(QMainWindow):
                 #Restore mouse
                 restore = QApplication.restoreOverrideCursor()
                 
-        def iniciar_audio_pendrive(self):
+        def start_on_device(self):
             global disk_path
             #Caixinhas para selecionar o dispositivo
             if self.d.isChecked():
@@ -221,7 +226,7 @@ class Window(QMainWindow):
                 
 
                 
-        def iniciar_audio(self, estado='normal', lista='False'):
+        def start_audio(self, estado='normal', lista='False'):
             if lista == 'True':
                 link = k
                 if estado == 'pnd':
@@ -246,14 +251,14 @@ class Window(QMainWindow):
                     if lista == 'False':
                         self.msg = QMessageBox()
                         self.msg.setIcon(QMessageBox.Information)
-                        self.msg.setText("Audio salvo na area de trabalho")
+                        self.msg.setText("Arquivo MP4 salvo na area de trabalho")
                         self.msg.setWindowTitle('Python Youtube Downloader')
                         self.msg.setWindowIcon(QIcon('ytbico.ico'))
                         self.msg.exec_()                                  
                     else:
                         pass
 
-        def iniciar_conversao(self):
+        def start_convert(self):
             #Variavel $tipo serve para identificar o formato final definido pelo usuario
             if self.avi.isChecked():
                 tipo = 'avi'
