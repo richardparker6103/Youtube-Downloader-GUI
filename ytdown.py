@@ -60,7 +60,7 @@ class Window(QMainWindow):
             self.button8 = QPushButton('Iniciar\nDownload', self)
             self.button8.clicked.connect(self.main)
             self.button8.resize(80,60)
-            self.button8.move(520,310)            
+            self.button8.move(420,315)            
             # Entrada de texto para entrada da variavel link
             self.textbox = QLineEdit(self)
             self.textbox.move(230, 242)
