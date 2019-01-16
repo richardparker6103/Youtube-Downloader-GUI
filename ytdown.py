@@ -10,27 +10,26 @@ from ytconsole import *
 #Variaveis para esconder o conteudo de saida dos comandos de download -> iniciar_video() iniciar_audio()
 #Comandos de conversao mostram a saida em uma tela cmd
 #Hide output console while downloading
-
-
 si = subprocess.STARTUPINFO()
 si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 CREATE_NO_WINDOW = 0x08000000
 #Faca a checkagem de arquivos antes de prosseguir...
+#Check files before continue...
 os.system('python depends.py')
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
 x = 1
-local_path = os.getcwd()
-
-    
+  
 class Window(QMainWindow):
         def __init__(self):
             super(Window, self).__init__()
             self.setGeometry(50,50,700,500)
             self.setWindowTitle('Python Youtube Downloader')
-            self.setWindowIcon(QIcon('ytbico.ico'))                   
+            self.setWindowIcon(QIcon('ytbico.ico'))
+            # Barra de menu
+            # Menu bar
             extractAction = QAction("Sobre", self)
             extractAction.setShortcut("Ctrl+Q")
             extractAction.setStatusTip('Ler varios objetos a partir de um arquivo de texto')
@@ -122,18 +121,18 @@ class Window(QMainWindow):
             painter.setPen(QPen(Qt.black,2, Qt.SolidLine))
             painter.drawRect(10, 30, 680, 460)
                 
-        def progress_bar(self):
+        def progress_bar(self): # Barra de progresso inicio
                 self.completed = 0
                 while self.completed < 45:
                         self.completed += 0.0001
                         self.progress.setValue(self.completed)
         def end_progress_bar(self):
-                self.completed = 45
+                self.completed = 45 # Barra de progresso fim
                 while self.completed < 100:
                         self.completed += 0.0001
                         self.progress.setValue(self.completed)
                 
-        def slow_progress_bar(self): #Barra de progresso mais lenta, no caso de varios links no arquivo de entrada
+        def slow_progress_bar(self): #Barra de progresso ate o valor 20, por conta de mais arquivos de lista
                 self.completed = 0
                 while self.completed < 20:
                         self.completed += 0.0001
@@ -158,6 +157,7 @@ class Window(QMainWindow):
 
         def start_convert(self):
             #Variavel $tipo serve para identificar o formato final definido pelo usuario
+            #String $tipo to know the final format of file
             if self.avi.isChecked():
                 tipo = 'avi'
             elif self.wmv.isChecked():
@@ -175,7 +175,8 @@ class Window(QMainWindow):
             elif self.mp3.isChecked():
                 tipo = 'mp3'                
 
-            #Abra o arquivo principal        
+            #Abra o arquivo principal
+            #Open the source file
             f = file(str(source_arquivo))
             #Descubra o formato do arquivo principal
             f2 = f.name.split('.')
