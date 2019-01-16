@@ -4,8 +4,9 @@ import sys
 import os
 import subprocess
 import threading
+import time
 from ytconsole import *
-    
+
 #Variaveis para esconder o conteudo de saida dos comandos de download -> iniciar_video() iniciar_audio()
 #Comandos de conversao mostram a saida em uma tela cmd
 #Hide output console while downloading
@@ -14,7 +15,6 @@ from ytconsole import *
 si = subprocess.STARTUPINFO()
 si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 CREATE_NO_WINDOW = 0x08000000
-
 #Faca a checkagem de arquivos antes de prosseguir...
 os.system('python depends.py')
 
@@ -40,24 +40,11 @@ class Window(QMainWindow):
             fileMenu.addAction(extractAction)
             self.home()
         def home(self):
-            global tipo
             # Imagem principal
             self.pic = QLabel(self)
             self.pic.setPixmap(QPixmap('ytbico.ico'))
             self.pic.setGeometry(234,-120,480,480)
             # Botoes
-            self.button = QPushButton('Somente video', self)
-            self.button.clicked.connect(self.start_video)
-            self.button.resize(100,30)
-            self.button.move(260,280)
-            self.button2 = QPushButton('Somente audio', self)
-            self.button2.clicked.connect(self.start_audio)
-            self.button2.move(380,280)
-            self.button2.resize(100, 30)
-            self.button4 = QPushButton('Baixar em \ndispositivo', self)
-            self.button4.clicked.connect(self.start_on_device)
-            self.button4.resize(80,35)
-            self.button4.move(315,330)
             self.button5 = QPushButton('Selecionar arquivo...', self)
             self.button5.clicked.connect(self.browse_convert)
             self.button5.resize(121,30)
@@ -68,19 +55,27 @@ class Window(QMainWindow):
             self.button6.move(600,420)
             self.button7 = QPushButton('Abrir lista...', self)
             self.button7.clicked.connect(self.browse)
-            self.button7.resize(75,26)
-            self.button7.move(520,238)
+            self.button7.resize(67,24)
+            self.button7.move(520,241)
+            self.button8 = QPushButton('Iniciar\nDownload', self)
+            self.button8.clicked.connect(self.main)
+            self.button8.resize(80,60)
+            self.button8.move(520,310)            
             # Entrada de texto para entrada da variavel link
             self.textbox = QLineEdit(self)
-            self.textbox.move(230, 240)
-            self.textbox.resize(270,25)
+            self.textbox.move(230, 242)
+            self.textbox.resize(280,22)
             # Caixinhas
+            self.cx_video = QCheckBox('Somente video', self)
+            self.cx_video.setGeometry(QRect(260,280, 100, 21))   
+            self.cx_audio = QCheckBox('Somente audio', self)
+            self.cx_audio.setGeometry(QRect(380, 280, 100, 21))            
             self.e = QCheckBox('E:/ (padrao)', self)
-            self.e.setGeometry(QRect(440,320, 100, 21))
+            self.e.setGeometry(QRect(290,315, 100, 21))
             self.d = QCheckBox('D:/', self)
-            self.d.setGeometry(QRect(440,340, 100, 21))
+            self.d.setGeometry(QRect(290 ,335, 100, 21))
             self.f = QCheckBox('F:/', self)
-            self.f.setGeometry(QRect(440,360, 100, 21))            
+            self.f.setGeometry(QRect(290,355, 100, 21))            
             self.avi = QCheckBox('AVI', self)
             self.avi.setGeometry(QRect(500,420,71,21))
             self.wmv = QCheckBox('WMV', self)
@@ -98,63 +93,35 @@ class Window(QMainWindow):
             self.flac = QCheckBox('FLAC', self)
             self.flac.setGeometry(QRect(300, 440, 71,21))
             # Textos do app
-            self.tx = QLabel("Insira a URL ->", self)
-            self.tx.move(110,235)
-            self.tx.setFont(QFont('Monospace', 11))
+            self.sendto = QLabel("Enviar para:", self)
+            self.sendto.move(200,323)
+            self.sendto.setFont(QFont('Monospace', 10))
+            self.tx= QLabel("Insira a URL ->", self)
+            self.tx.move(130,237)
+            self.tx.setFont(QFont('Monospace', 10))
             self.tx2 = QLabel("Converter para: ", self)
             self.tx2.move(200,420)
             self.line1 = QLabel('  ___________________________________Conversor de Ext.___________________________________ ', self)
             self.line1.move(0, 375)
             self.line1.resize(1000, 20)
             self.line1.setFont(QFont('Verdana', 10))
-            self.arrow1 = QLabel('-->', self)
-            self.arrow1.move(410, 333)
-            self.arrow1.resize(20,20)
-            self.arrow1.setFont(QFont('Monospace', 10))
             self.progress = QProgressBar(self)
             self.progress.setGeometry(11.9, 479, 713, 10)
             #LOCK SIZE ( Nao aumentar o tamanho da janela )
             self.setFixedSize(self.size())
             self.showMaximized()
+            #MSG PAINEL
+            self.msg = QMessageBox()
+            self.msg.setIcon(QMessageBox.Information)
+            self.msg.setWindowTitle('Python Youtube Downloader')
+            self.msg.setWindowIcon(QIcon('ytbico.ico'))
 
         def paintEvent(self, e):
             #Retangulo design
             painter = QPainter(self)
             painter.setPen(QPen(Qt.black,2, Qt.SolidLine))
             painter.drawRect(10, 30, 680, 460)
-        def start_video(self, estado='normal', lista='False'):
-            global link
-            #Se existir um arquivo com links, troque a variavel $link para cada valor no arquivo com links, k.
-            if lista == 'True':    
-                link = k
-                subprocess.call('python ytconsole.py -v -l %s' %link, creationflags=CREATE_NO_WINDOW)
-            else:
-                link = self.textbox.text()
-                #Se o conteudo do texto $link for nulo ou menor que 40, alerte o erro de entrada.
-                if len(link) < 40:
-                    self.msg = QMessageBox()
-                    self.msg.setIcon(QMessageBox.Information)
-                    self.msg.setText("O link '{}' e invalido, por favor digite novamente.".format(str(link)))
-                    self.msg.setWindowTitle('Python Youtube Downloader')
-                    self.msg.setWindowIcon(QIcon('ytbico.ico'))
-                    self.msg.exec_()
-                else:
-                    #Subprocess = objeto para execucao de comandos em segundo plano junto com a variavel CREATE_NO_WINDOW
-                    self.loading_cursor()
-                    self.progress_bar()
-                    subprocess.call('python ytconsole.py -v -l %s' %link, creationflags=CREATE_NO_WINDOW)
-                    self.end_progress_bar()
-                    self.restore_cursor()
-                    if lista == 'False':
-                        self.msg = QMessageBox()
-                        self.msg.setIcon(QMessageBox.Information)
-                        self.msg.setText("Video salvo na area de trabalho")
-                        self.msg.setWindowTitle('Python Youtube Downloader')
-                        self.msg.setWindowIcon(QIcon('ytbico.ico'))
-                        self.msg.exec_()                                  
-                    else:
-                        pass
-        
+                
         def progress_bar(self):
                 self.completed = 0
                 while self.completed < 45:
@@ -188,75 +155,6 @@ class Window(QMainWindow):
                 #Restore mouse
                 restore = QApplication.restoreOverrideCursor()
                 
-        def start_on_device(self):
-            global disk_path
-            #Caixinhas para selecionar o dispositivo
-            if self.d.isChecked():
-                disk_path = 'D:/'
-            elif self.f.isChecked():
-                disk_path = 'F:/'
-            else:
-                disk_path = 'E:/'
-            link = self.textbox.text()
-            try:
-                #Tenta entrar no diretorio do dispositivo, caso haja algum error e porque ele nao foi conectado.
-                s = os.chdir(disk_path)
-                os.chdir(local_path)
-                self.loading_cursor()
-                self.progress_bar()
-                subprocess.call('python ytconsole.py -a -p -l %s' %link, creationflags=CREATE_NO_WINDOW)
-                self.restore_cursor()
-                self.end_progress_bar()
-                self.msg = QMessageBox()
-                self.msg.setIcon(QMessageBox.Information)
-                self.msg.setWindowTitle('Python Youtube Downloader')
-                self.msg.setText("O arquivo MP3 foi salvo no dispositivo %s" %disk_path)
-                self.msg.setWindowIcon(QIcon('ytbico.ico'))
-                self.msg.exec_()                     
-            except WindowsError:
-                global x
-                x = x + 1
-                self.msg2 = QMessageBox()
-                self.msg2.setIcon(QMessageBox.Information)
-                self.msg2.setWindowTitle('Python Youtube Downloader')
-                self.msg2.setText('Dispositivo {} desconectado, conecte e tente novamente.'.format(disk_path))
-                self.msg2.setWindowIcon(QIcon('ytbico.ico'))
-                self.msg2.exec_()
-                    
-                
-
-                
-        def start_audio(self, estado='normal', lista='False'):
-            if lista == 'True':
-                link = k
-                if estado == 'pnd':
-                    subprocess.call('python ytconsole.py -a -p -l %s' %link, creationflags=CREATE_NO_WINDOW)
-                else:
-                    subprocess.call('python ytconsole.py -a -l %s' %link, creationflags=CREATE_NO_WINDOW)
-            else:
-                link = self.textbox.text()
-                if len(link) < 40:
-                    self.msg = QMessageBox()
-                    self.msg.setIcon(QMessageBox.Information)
-                    self.msg.setText("O link '{}' invalido, por favor, digite um link valido.".format(str(link)))
-                    self.msg.setWindowTitle('Python Youtube Downloader')
-                    self.msg.setWindowIcon(QIcon('ytbico.ico'))
-                    self.msg.show()
-                else:
-                    self.loading_cursor()
-                    self.progress_bar()
-                    subprocess.call('python ytconsole.py -a -l %s' %link, creationflags=CREATE_NO_WINDOW)
-                    self.restore_cursor()
-                    self.end_progress_bar()
-                    if lista == 'False':
-                        self.msg = QMessageBox()
-                        self.msg.setIcon(QMessageBox.Information)
-                        self.msg.setText("Arquivo MP4 salvo na area de trabalho")
-                        self.msg.setWindowTitle('Python Youtube Downloader')
-                        self.msg.setWindowIcon(QIcon('ytbico.ico'))
-                        self.msg.exec_()                                  
-                    else:
-                        pass
 
         def start_convert(self):
             #Variavel $tipo serve para identificar o formato final definido pelo usuario
@@ -329,9 +227,8 @@ class Window(QMainWindow):
                     self.msg.show()
                                 
         def browse_convert(self):
-            global x
             x += 1
-            #self.tx5 variavel de ambiente, mostra a path onde o arquivo foi aberto, ex: "C:/users/usuario/desktop/mktp.mp3"
+            #self.tx5 variavel de ambiente, mostra a path onde o arquivo foi aberto, ex: "C:/users/usuario/mktp.mp3"
             #Clear the content before repeat ( limpa o conteudo da variavel self.tx5 antes de preencher outra em caso de erro do usuario )
             #Se o numero de repeticoes for igual a 2, entao a variavel e zerada.
             if x >= 3:
@@ -375,9 +272,11 @@ Para ver as bibliotecas necessarias consulte o arquivo README
 Link do projeto: https://github.com/richardparker6103/ytdown/blob/master/
 """)
             self.msgt.setWindowIcon(QIcon('ytbico.ico'))
-            self.msgt.show()           
+            self.msgt.show()
+            
         def browse(self, convert=False):
             global k
+            global lines
             nome_arquivo = QFileDialog.getOpenFileName()
             print 'filePath' + nome_arquivo + '\n'
             fileHandle = open(nome_arquivo, 'r')
@@ -405,36 +304,137 @@ Link do projeto: https://github.com/richardparker6103/ytdown/blob/master/
             if 'youtube.com/' not in str(lines):
                 self.msg.setText('Nao foram encontrados nenhum link no arquivo {}'.format(str(nome_arquivo)))
                 self.msg.exec_()
-                self.browse
             else:
-                asp = QMessageBox.question(Window(), 'Python Youtube Downloader',  'Foram encontradas {} links no arquivo txt. Continuar ?'.format(str(l)), QMessageBox.Yes, QMessageBox.No)
-                if asp == QMessageBox.Yes:
-                    asp23 = QMessageBox.question(Window(), 'Python Youtube Downloader', 'Voce deseja baixar somente MP3 ?', QMessageBox.Yes, QMessageBox.No)
-                    if asp23 == QMessageBox.No:
-                        #k = linhas no arquivo aberto, para cada link contido, faca executar o comando principal
-                        self.loading_cursor()
-                        self.slow_progress_bar()
-                        for k in lines:
-                            self.iniciar_video('normal', 'True')
-                        self.restore_cursor()
-                        self.end_slow_progress_bar()
-                        self.msgt2 =QMessageBox()
-                        self.msgt2.setIcon(QMessageBox.Information)
-                        self.msgt2.setWindowTitle('Python Youtube Downloader')
-                        self.msgt2.setText("{} arquivos MP4 foram baixados, salvos na area de Trabalho".format(int(l)))
-                        self.msgt2.setWindowIcon(QIcon('ytbico.ico'))
-                        self.msgt2.exec_()                        
-                    else:
-                        for k in lines:
-                            self.iniciar_audio('normal', 'True')
-                        self.msgt2 =QMessageBox()
-                        self.msgt2.setIcon(QMessageBox.Information)
-                        self.msgt2.setWindowTitle('Python Youtube Downloader')
-                        self.msgt2.setText("{} arquivos MP3 foram baixados, salvos na area de Trabalho".format(int(l)))
-                        self.msgt2.setWindowIcon(QIcon('ytbico.ico'))
-                        self.msgt2.exec_()
-                            
-              
+                self.msg.setText('Foram encontradas {} links no arquivo\n{}'.format(str(l), str(nome_arquivo)))
+                self.msg.exec_()
+                self.tx7 = QLabel('{}'.format(nome_arquivo), self)
+                self.tx7.resize(250,20)
+                self.tx7.move(490,270)
+                self.tx7.setFont(QFont('Monospace', 9))
+                self.tx7.show()
+                self.list_active = True
+        def start_all(self, link, ft, disk_path, list_active):
+            # ft is format = mp3, mp4
+            #If disk_path is True
+                if disk_path:
+                        try:
+                                #Tenta entrar no diretorio do dispositivo, caso haja algum error e porque ele nao foi conectado.
+                                s = os.chdir(disk_path)
+                                print "[*] Dispositivo encontrado -> {}".format(disk_path)
+                                print "[*] Alterando diretorio para -> {}".format(script_dir)
+                                s = os.chdir(script_dir)
+                                if self.list_active:
+                                        if ft == '.mp4':
+                                                self.slow_progress_bar()
+                                                self.loading_cursor()                                        
+                                                for k in lines:
+                                                        cmd = os.system('python ytconsole.py -v -d "{}" -l "{}"'.format(disk_path, k))
+                                                self.end_slow_progress_bar()
+                                                self.restore_cursor()
+                                                self.msg.setText("{} Arquivos baixados\ntodos enviados para {}".format(len(lines), disk_path))
+                                                self.msg.exec_()                                                          
+                                        else:
+                                                self.slow_progress_bar()
+                                                self.loading_cursor()
+                                                for k in lines:
+                                                        cmd = os.system('python ytconsole.py -a -d "{}" -l {}'.format(disk_path, k))
+                                                self.end_slow_progress_bar()
+                                                self.restore_cursor()
+                                                self.msg.setText("{} arquivos baixados\ntodos enviados para {}".format(len(lines), disk_path))
+                                                self.msg.exec_()
+                                else:
+                                        if ft == '.mp4':
+                                                self.progress_bar()
+                                                self.loading_cursor()                                        
+                                                cmd = os.system('python ytconsole.py -v -d "%s" -l "%s"'%(disk_path, link))
+                                                print "[*] O comando foi terminado"
+                                                print "[*] Resultado -> {}".format(cmd)
+                                                self.end_progress_bar()
+                                                self.restore_cursor()                                        
+                                                self.msg.setText("Finalizado\narquivos enviados para {}".format(disk_path))
+                                                #continue
+                                                self.msg.exec_()
+                                        else:
+                                                self.progress_bar()
+                                                self.loading_cursor()
+                                                cmd = os.system('python ytconsole.py -a -d "%s" -l "%s"'%(disk_path, link))
+                                                self.end_progress_bar()
+                                                self.restore_cursor()                                        
+                                                self.msg.setText("Finalizado\narquivos enviados para {}")
+                                                self.msg.exec_()
+                        except WindowsError:
+                                self.msg.setText('Dispositivo {} desconectado, conecte e tente novamente.'.format(disk_path))
+                                self.msg.exec_()
+                else:
+                        if self.list_active:
+                                if ft == '.mp4':
+                                        self.slow_progress_bar()
+                                        self.loading_cursor()                                        
+                                        for k in lines:
+                                                cmd = os.system('python ytconsole.py -v -l %s' %k)
+                                        self.end_slow_progress_bar()
+                                        self.restore_cursor()                                        
+                                        self.msg.setText("{} arquivos baixados.".format(len(lines)))
+                                        self.msg.exec_()                                                             
+                                else:
+                                        self.slow_progress_bar()
+                                        self.loading_cursor()
+                                        for k in lines:
+                                                cmd =os.system('python ytconsole.py -a -l %s' %k)
+                                        self.end_slow_progress_bar()
+                                        self.restore_cursor()
+                                        self.msg.setText("{} Arquivos baixados.".format(len(lines)))
+                                        self.msg.exec_()
+                        else:
+                                if ft == '.mp4':
+                                        self.slow_progress_bar()
+                                        self.loading_cursor()                                        
+                                        cmd = os.system('python ytconsole.py -v -l %s' %link)
+                                        self.end_slow_progress_bar()
+                                        self.restore_cursor()                                        
+                                        self.msg.setText("  Finalizado.")
+                                        self.msg.exec_()                                                             
+                                else:
+                                        self.progress_bar()
+                                        self.loading_cursor()
+                                        cmd = os.system('python ytconsole.py -a -l %s' %link)
+                                        self.end_progress_bar()
+                                        self.restore_cursor()
+                                        self.msg.setText("  Finalizado")
+                                        self.msg.exec_()  
+                                           
+        def main(self):
+                global disk_path
+                link = self.textbox.text()
+                if self.e.isChecked():
+                        disk_path = 'E:/'
+                elif self.d.isChecked():
+                        disk_path = 'D:/'
+                elif self.f.isChecked():
+                        disk_path = 'F:/'
+                else:
+                        disk_path = False
+                        
+                if self.cx_video.isChecked():
+                        ft = '.mp4'
+                elif self.cx_audio.isChecked():
+                        ft = '.mp3'
+                else:
+                        self.msg.setText('Selecione uma opcao para video/audio !')
+                        self.msg.exec_()
+                         
+                try:      
+                        self.start_all(link, ft, disk_path, self.list_active)
+                except: #Exception for list  False ( Excecao para o caso de nao haver listas )
+                        print "[*] Arquivo de lista e falso, ignorando ..."
+                        self.list_active = False
+                        self.start_all(link, ft, disk_path, self.list_active)
+                
+                
+                
+                                
+                        
+                        
 app = QApplication(sys.argv)
 gui = Window()
 sys.exit(app.exec_())
