@@ -20,10 +20,12 @@ os.system('python depends.py')
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
-x = 1
+xcount = 1
+
   
 class Window(QMainWindow):
         def __init__(self):
+	    self.z = 1
             super(Window, self).__init__()
             self.setGeometry(50,50,700,500)
             self.setWindowTitle('Python Youtube Downloader')
@@ -228,11 +230,11 @@ class Window(QMainWindow):
                     self.msg.show()
                                 
         def browse_convert(self):
-            x += 1
+            self.z += 1
             #self.tx5 variavel de ambiente, mostra a path onde o arquivo foi aberto, ex: "C:/users/usuario/mktp.mp3"
             #Clear the content before repeat ( limpa o conteudo da variavel self.tx5 antes de preencher outra em caso de erro do usuario )
             #Se o numero de repeticoes for igual a 2, entao a variavel e zerada.
-            if x >= 3:
+            if self.z >= 3:
                 try:
                         self.tx5.clear()
                 except:
@@ -241,7 +243,7 @@ class Window(QMainWindow):
             source_arquivo = QFileDialog.getOpenFileName()
             try:
                     print 'Arquivo selecionado -->' + source_arquivo + '\n'
-                    self.tx5 = QLabel("({})".format(source_arquivo), self)
+                    self.tx5 = QLabel("{}".format(source_arquivo), self)
                     #Resize for increase the text ( redimensionar o tamanho para aparecer todo o conteudo do texto )
                     self.tx5.resize(250,20)
                     self.tx5.move(12,455)
